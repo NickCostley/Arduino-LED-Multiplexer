@@ -1,0 +1,43 @@
+const int SER = 11;
+const int LATCH = 12;
+const int CLK = 13;
+
+int bin = 0;
+
+void setup() {
+  pinMode(SER, OUTPUT);
+  pinMode(LATCH, OUTPUT);
+  pinMode(CLK, OUTPUT);
+  digitalWrite(LATCH, LOW);
+  shiftOut(SER, CLK, MSBFIRST, 1);
+  for (int i = 2; i < 8; i++){
+    pinMode(i, OUTPUT);
+  }
+}
+
+void loop() {
+  display(array);
+}
+
+void display(){
+  for (int f = 0; f < 1000; f++){
+    fir (int i = 2; i < 8; i++){
+      digitalWrite(LATCH, LOW);
+      for (int j = 0; j < 8; j++){
+        if (a[j][i-2] == 1){
+          digitalWrite(LATCH, HIGH);
+          digtalWrite(i, HIGH);
+          delay(100);
+          digitalWrite(i, LOW);
+          bin = pow(2,j);
+          shiftOut(SER, CLK, MSBFIRST, bin);
+        }
+        else {
+          digitalWrite(i, LOW);
+          digitalWrite(LATCH, LOW);
+        }
+      }
+      digitalWrite(i, LOW);
+    }
+  }
+}
