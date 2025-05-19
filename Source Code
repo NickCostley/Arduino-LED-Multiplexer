@@ -1,6 +1,31 @@
-const int SER = 11;
-const int LATCH = 12;
+/*
+bool Off[8][6] = {
+{0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0}
+};
+
+bool On[8][6] = {
+{1, 1, 1, 1, 1, 1},
+{1, 1, 1, 1, 1, 1},
+{1, 1, 1, 1, 1, 1},
+{1, 1, 1, 1, 1, 1},
+{1, 1, 1, 1, 1, 1},
+{1, 1, 1, 1, 1, 1},
+{1, 1, 1, 1, 1, 1},
+{1, 1, 1, 1, 1, 1}
+};
+*/
+
+const int SER = 12;
+const int LATCH = 11;
 const int CLK = 13;
+int transistor[6] = {0};
 
 int bin = 0;
 
@@ -9,22 +34,22 @@ void setup() {
   pinMode(LATCH, OUTPUT);
   pinMode(CLK, OUTPUT);
   digitalWrite(LATCH, LOW);
-  shiftOut(SER, CLK, MSBFIRST, 1);
   for (int i = 2; i < 8; i++){
-    pinMode(i, OUTPUT);
+    pinMode(i, OUTPUT);               // Transistor Pins  
   }
 }
 
 void loop() {
-  display(array);
+  testing();
 }
 
+/*
 void display(){
   for (int f = 0; f < 1000; f++){
-    fir (int i = 2; i < 8; i++){
-      digitalWrite(LATCH, LOW);
+    for (int i = 2; i < 8; i++){      // Loops through different transistors being active.
+      digitalWrite(LATCH, LOW);       // All anodes are set low to prevent unintentional activation.
       for (int j = 0; j < 8; j++){
-        if (a[j][i-2] == 1){
+        if (a[j][i-2] == 1){          // 'If pixel is high'
           digitalWrite(LATCH, HIGH);
           digtalWrite(i, HIGH);
           delay(100);
@@ -39,5 +64,56 @@ void display(){
       }
       digitalWrite(i, LOW);
     }
+  }
+}
+
+*/
+
+// Transistor on, Latch off.
+// Shift in serial bits, Latch on
+
+
+void testing(){
+
+/*
+int disp[8][6] = {
+{1, 0, 1, 0, 1, 0},
+{0, 1, 0, 1, 0, 1},
+{1, 0, 1, 0, 1, 0},
+{0, 1, 0, 1, 0, 1},
+{1, 0, 1, 0, 1, 0},
+{0, 1, 0, 1, 0, 1},
+{1, 0, 1, 0, 1, 0},
+{0, 1, 0, 1, 0, 1}
+};
+*/
+int disp[8][6] = {
+{1, 1, 1, 1, 1, 1},
+{1, 1, 1, 1, 1, 1},
+{1, 1, 1, 1, 1, 1},
+{1, 1, 1, 1, 1, 1},
+{1, 1, 1, 1, 1, 1},
+{1, 1, 1, 1, 1, 1},
+{1, 1, 1, 1, 1, 1},
+{1, 1, 1, 1, 1, 1}
+};
+
+//  for (int f = 0; f < 1000; f++){
+    for (int i = 0; i < 6; i++){
+      digitalWrite(LATCH, LOW);
+      digitalWrite(i+2, HIGH);
+      int temp = 0;
+      for (int j = 0; j < 8; j++){
+        temp = disp[j][i];
+      }
+      shiftOut(SER, CLK, MSBFIRST, temp);
+      digitalWrite(LATCH, HIGH);
+      //delay(1);
+      digitalWrite(i+2, LOW);
+    }
+//  }
+}
+
+
   }
 }
